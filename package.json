@@ -5,7 +5,11 @@
   "scripts": {
     "pyreqs": "pip install -q -r requirements.txt",
     "start": "concurrently \"cd TrainingControlCenter/frontend && npm start\" \"cd TrainingControlCenter/backend && npm start\"",
-    "install-pkg": "concurrently \"npm run pyreqs && npm install\" \"cd TrainingControlCenter/frontend && npm install\" \"cd TrainingControlCenter/backend && npm install\""
+    "install-pkg": "concurrently \"npm run pyreqs && npm install\" \"cd TrainingControlCenter/frontend && npm install\" \"cd TrainingControlCenter/backend && npm install\"",
+    "install-server": "npm run pyreqs && cd TrainingControlCenter/backend && npm install",
+    "start-server": "cd TrainingControlCenter/backend && npm start",
+    "install-client": "cd TrainingControlCenter/frontend && npm install",
+    "start-client": "cd TrainingControlCenter/frontend && npm start"
   },
   "eslintConfig": {
     "extends": [
