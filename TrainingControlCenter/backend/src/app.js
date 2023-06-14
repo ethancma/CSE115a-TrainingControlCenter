@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const yaml = require('js-yaml');
+const mongoose = require("mongoose");
 const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const path = require('path');
@@ -11,11 +12,25 @@ const activities = require('./activities');
 const plannedActivities = require('./plannedActivities');
 const graphs = require('./graphs');
 const preferences = require('./preferences');
+require("dotenv").config();
+
+const corsOptions = {
+    origin: "https://training-control-center-80lc.onrender.com", // frontend URI (ReactJS)
+}
 
 const app = express();
-app.use(cors());
+app.use(cors(corsOption));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+    const PORT = process.env.PORT || 8000
+    app.listen(PORT, () => {
+        console.log(`App is Listening on PORT ${PORT}`);
+    })
+}).catch(err => {
+    console.log(err);
+});
 
 const apiSpec = path.join(__dirname, '../api/openapi.yaml');
 
@@ -39,30 +54,30 @@ app.post('/v0/register', auth.register);
 app.post('/v0/login', auth.login);
 
 // Strava token
-app.post('/v0/token', auth.updateToken); 
-app.get('/v0/token', auth.getToken); 
+app.post('/v0/token', auth.updateToken);
+app.get('/v0/token', auth.getToken);
 
 // Get, add, delete favorite sports
-app.get('/v0/favorites', settings.getFavorites); 
-app.post('/v0/favorites', settings.updateFavorites); 
+app.get('/v0/favorites', settings.getFavorites);
+app.post('/v0/favorites', settings.updateFavorites);
 
 // Get, add, delete goals
-app.get('/v0/goals', settings.getGoals); 
-app.post('/v0/goals', settings.addGoal); 
-app.delete('/v0/goals', settings.deleteGoal); 
+app.get('/v0/goals', settings.getGoals);
+app.post('/v0/goals', settings.addGoal);
+app.delete('/v0/goals', settings.deleteGoal);
 
 // Get, add, delete activities
-app.get('/v0/activities', activities.getActivities); 
+app.get('/v0/activities', activities.getActivities);
 // Manual Entry
 app.post('/v0/activities', activities.addActivity);
 // Strava Entry
-app.post('/v0/activitiesStrava', activities.addActivityStrava); 
-app.delete('/v0/activities', activities.deleteActivity); 
+app.post('/v0/activitiesStrava', activities.addActivityStrava);
+app.delete('/v0/activities', activities.deleteActivity);
 
 // Get, add, delete activities
 app.get('/v0/plannedActivities', plannedActivities.getPlannedActivities)
 app.post('/v0/plannedActivities', plannedActivities.addPlannedActivity);
-app.delete('/v0/plannedActivities', plannedActivities.deletePlannedActivity); 
+app.delete('/v0/plannedActivities', plannedActivities.deletePlannedActivity);
 
 // Graphing
 app.post('/v0/graphs', graphs.drawGraph);
