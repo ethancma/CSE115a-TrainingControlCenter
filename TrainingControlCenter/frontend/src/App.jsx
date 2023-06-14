@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
 import Home from './Pages/Home';
 import Settings from './Pages/Settings';
 import Login from './Pages/Auth';
@@ -15,6 +16,14 @@ const AuthenticatedRoute = ({children}) => {
 };
 
 export default function App() {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    fetch("https://localhost:3010")
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message));
+  },[]);
+
   return (
     <BrowserRouter>
     <Routes>
