@@ -19,7 +19,7 @@ export default function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("https://localhost:3010")
+    fetch("https://training-control-center.onrender.com")
       .then((res) => res.json())
       .then((data) => setMessage(data.message));
   },[]);
