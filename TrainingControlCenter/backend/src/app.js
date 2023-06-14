@@ -45,6 +45,10 @@ app.use(
   }),
 );
 
+app.get("/", (req, res) => {
+    res.status(201).json({message: "Connected to Backend!"});
+});
+
 // API Paths
 
 // Register
